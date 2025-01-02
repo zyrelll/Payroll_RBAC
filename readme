@@ -1,0 +1,10 @@
+client
+npm create vue@latest
+npm install
+npm install -D tailwindcss@latest postcss@latest autoprefixer@latest
+npm install axios
+
+
+server
+1. pip install -r requirements.txt (add proxy if needed)
+2.
