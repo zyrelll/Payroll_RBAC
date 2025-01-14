@@ -1,13 +1,13 @@
 client
-npm create vue@latest
-npm install
-npm install -D tailwindcss@latest postcss@latest autoprefixer@latest
-npm install axios
+1. npm create vue@latest
+2. npm install
+3. npm install -D tailwindcss@latest postcss@latest autoprefixer@latest
+4. npm install axios
 
 
 server
 1. pip install -r requirements.txt (add proxy if needed)
 
-make sure to run on these domain - ports
+run on these domain - ports
   client: http://localhost:5173/
   server: http://127.0.0.1:5001/

@@ -4,5 +4,4 @@ flask_jwt_extended
 flask_sqlalchemy
 passlib
 
-
 #sqlalchemy.ext.declarative

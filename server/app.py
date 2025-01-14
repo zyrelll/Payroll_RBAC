@@ -14,17 +14,14 @@ from sqlalchemy.ext.declarative import DeclarativeMeta
 from passlib.hash import sha256_crypt
 import json
 
-from flask import Flask, jsonify, request
-from flask_cors import CORS
-
-#INITIALIZE THE APP#
 app = Flask(__name__)
+#creates a Flask application object — app — in the current Python module
 
 app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///db.sqlite" 
-#Using SQLALCHEMY database for this project
+#using SQLAlchemy database for this project
 
 app.config["JWT_SECRET_KEY"] = "c2e3ac86102257b59f176d2506e6739afa030f0a"
-#This secret key is mandatory to generate and verify jwt token. It should never be exposed to public
+#secret key to generate and verify JWT Token. Confidential!!!
 
 app.config['JWT_TOKEN_LOCATION'] = ['cookies']
 #default = headers. JWT token can be fetched from headers, cookies (best practice), query_string, json
@@ -35,7 +32,7 @@ app.config['JWT_COOKIE_CSRF_PROTECT'] = True
 #app.config['JWT_COOKIE_SECURE'] = False
 #The cookies will only be sent over a HTTPS connection, default = false
 
-# app.config['JWT_ACCESS_COOKIE_PATH'] = '/
+# app.config['JWT_ACCESS_COOKIE_PATH'] = '/'
 #The path for access cookies. default = '/'
 
 # app.config['JWT_COOKIE_SAMESITE'] = 'None'
@@ -67,7 +64,7 @@ class AlchemyEncoder(json.JSONEncoder):
 
         return json.JSONEncoder.default(self, obj)
     
-#DATABASE#
+#DATABASE
 db = SQLAlchemy()
 
 class Users(db.Model):
@@ -80,7 +77,7 @@ db.init_app(app)
 with app.app_context():
     db.create_all()
 
-#ROUTING
+#API ROUTING
 @app.route("/register", methods=["POST"])
 def register():
     post_username = request.json.get("username", None)
@@ -97,7 +94,6 @@ def register():
     db.session.commit()
     
     return jsonify({"msg": "Registration Success"}), 200
-#add try except 
 
 @app.route("/login", methods=["POST"])
 def login():
@@ -123,7 +119,6 @@ def login():
     # resp.set_cookie('access_token_cookie', access_token, httponly=True)
     return resp, 200
     # return Response(converted_data, mimetype='application/json')
-#add try except 
 
 @app.route('/token/refresh', methods=['POST'])
 @jwt_required(refresh=True)
@@ -137,7 +132,7 @@ def refresh():
     set_access_cookies(resp, access_token)
     return resp, 200
 
-@app.route('/token/remove', methods=['POST']) #ini untuk logout, DONE
+@app.route('/token/remove', methods=['POST']) #for logout, DONE
 def logout():
     resp = jsonify({'logout': True})
     unset_jwt_cookies(resp)
@@ -151,7 +146,6 @@ def protected():
 
 @app.route('/setCookiesRoleFromJWT', methods=['GET'])
 @jwt_required()
-#@verify_jwt_in_request
 def setRole():
     csrf_cookie = request.cookies.get('csrf_access_token')
     if not csrf_cookie:
