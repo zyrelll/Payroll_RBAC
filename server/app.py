@@ -26,7 +26,7 @@ app.config["JWT_SECRET_KEY"] = "c2e3ac86102257b59f176d2506e6739afa030f0a"
 app.config['JWT_TOKEN_LOCATION'] = ['cookies']
 #default = headers. JWT token can be fetched from headers, cookies (best practice), query_string, json
 
-app.config['JWT_COOKIE_CSRF_PROTECT'] = True
+# app.config['JWT_COOKIE_CSRF_PROTECT'] = True
 #True in production
 
 #app.config['JWT_COOKIE_SECURE'] = False
@@ -45,7 +45,7 @@ app.config['JWT_COOKIE_CSRF_PROTECT'] = True
 
 jwt = JWTManager(app)
 
-CORS(app, support_credentials=True, resources={r"/*": {"origins": "http://localhost:5173"}})
+CORS(app, supports_credentials=True, resources={r"/*": {"origins": "http://localhost:5173"}})
 #Cross-Origin Resource Sharing, only allow load resource from written origins above
 #support_credentials=True is used to allow cookies or authenticated requests to be made cross origins
 
@@ -144,7 +144,7 @@ def protected():
     username = get_jwt_identity()
     return jsonify({'hello': 'from {}'.format(username)}), 200
 
-@app.route('/setCookiesRoleFromJWT', methods=['GET'])
+@app.route('/role', methods=['GET'])
 @jwt_required()
 def setRole():
     csrf_cookie = request.cookies.get('csrf_access_token')
@@ -153,7 +153,7 @@ def setRole():
     claims = get_jwt()
     resp = make_response('setting role cookies')
     resp.set_cookie('role', claims['role'])
-    return resp , 200
+    return resp, 200
 
 # @app.route("/protected", methods=["GET"])
 # @jwt_required()

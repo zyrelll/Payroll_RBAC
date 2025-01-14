@@ -83,16 +83,6 @@ export default {
 
     },
     methods: {
-        getBooks() {
-            const path = 'http://localhost:5001/books';
-            axios.get(path)
-                .then((res) => {
-                    this.books = res.data.books
-                })
-                .catch((error) => {
-                    console.error(error);
-                });
-            },
         roleRedirect(payload) {
             const path = 'http://localhost:5001/getRole';
             axios.get(path, payload, {
@@ -124,12 +114,12 @@ export default {
         },
         async getRole() {
             try {
-                const path = 'http://localhost:5001/setCookiesRoleFromJWT';
+                const path = 'http://localhost:5001/role';
                 const response = await axios.get(path, {
                     withCredentials: true, // This should be outside the headers
                 });
                 console.log('Role: ', response.data);
-                // $cookies.set('Role', response.data);
+                $cookies.set('Role', response.data);
                 this.$router.push('/');
             } catch (error) {
                 console.error('Error fetching user role:', error.response?.data || error.message );
