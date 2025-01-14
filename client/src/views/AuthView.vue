@@ -119,7 +119,7 @@ export default {
                     withCredentials: true, // This should be outside the headers
                 });
                 console.log('Role: ', response.data);
-                $cookies.set('Role', response.data);
+                // $cookies.set('Role', response.data);
                 this.$router.push('/');
             } catch (error) {
                 console.error('Error fetching user role:', error.response?.data || error.message );
