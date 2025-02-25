@@ -107,18 +107,13 @@ def login():
         return jsonify({"msg": "Invalid username or password"}), 401
     
     additional_claims = {"role": user.role}
-    
-    # converted_data = json.dumps(user, cls=AlchemyEncoder)
 
     access_token = create_access_token(identity=post_username, additional_claims=additional_claims, expires_delta=timedelta(hours=1))
-    # refresh_token = create_refresh_token(identity=post_username, )
-    # Response.set_cookie('access_token_cookie', access_token, max_age=None, expires=None, path='/', domain=None, secure=False, httponly=True, samesite=None, partitioned=False)
+
     resp = jsonify({'msg': "Login successful"})
     set_access_cookies(resp, access_token)
-    # set_refresh_cookies(resp, refresh_token)
-    # resp.set_cookie('access_token_cookie', access_token, httponly=True)
+
     return resp, 200
-    # return Response(converted_data, mimetype='application/json')
 
 @app.route('/token/refresh', methods=['POST'])
 @jwt_required(refresh=True)
@@ -138,12 +133,6 @@ def logout():
     unset_jwt_cookies(resp)
     return resp, 200
 
-@app.route('/api/example', methods=['GET'])
-@jwt_required()
-def protected():
-    username = get_jwt_identity()
-    return jsonify({'hello': 'from {}'.format(username)}), 200
-
 @app.route('/role', methods=['GET'])
 @jwt_required()
 def setRole():
@@ -155,11 +144,14 @@ def setRole():
     resp.set_cookie('role', claims['role'])
     return resp, 200
 
-# @app.route("/protected", methods=["GET"])
-# @jwt_required()
-# def protected():
-#     current_user = get_jwt_identity()
-#     return jsonify(logged_in_as=current_user), 200
+
+
+@app.route('/api/protected', methods=['GET'])
+@jwt_required()
+def protected():
+    username = get_jwt_identity()
+    return jsonify({'hello': 'from {}'.format(username)}), 200
+
 
 # @app.route("/protectedAddRole", methods=["GET"])
 # @jwt_required()
